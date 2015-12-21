@@ -1,13 +1,12 @@
 section .text
 global _start ;must be declared for linker (ld)
 
-p:
+; r8 int - number to print
+printInt:
 ;	mov rax, 97
 ;	mov [buffer], rax
 
 ;	mov [buffer + 1], rax
-
-	mov r8, 987
 
 	; divide by 100
 	mov edx, 0 ; high 32bit of dividend
@@ -55,7 +54,8 @@ p:
 
 _start:
 
-	call p
+	mov r8, 345
+	call printInt
 
 
 	mov rax, 1 ; write
@@ -73,7 +73,5 @@ section .bss
 	buffer: resb 20
 
 section .data
-	l db '0123456789'
-
 	msg db 'Hello, world!', 0xa     ;the string
 	len equ $ - msg                 ;length of the string
