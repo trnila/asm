@@ -7,7 +7,6 @@ printInt:
 ;	mov [buffer], rax
 
 ;	mov [buffer + 1], rax
-
 	; divide by 100
 	mov edx, 0 ; high 32bit of dividend
 	mov rax, r8 ; low 32bit of dividend
@@ -43,19 +42,46 @@ printInt:
 	mov [buffer + 2], r8
 
 
-
 	mov rax, 1 ; write
 	mov rdi, 1 ; stdout
 	mov rsi, buffer
 	mov rdx, 3
-	syscall
+  syscall
+
 	ret
 
+printSpace:
+	mov rax, ' '
+	mov [buffer], rax
+
+	mov rax, 1 ; write
+	mov rdi, 1 ; stdout
+	mov rsi, buffer
+	mov rdx, 1
+	syscall
+
+	ret
 
 _start:
 
-	mov r8, 345
+	mov cx, 10
+	mov rbx, numbers
+loop:
+	push rcx
+	push rbx
+
+	mov r8, 0
+	mov r8b, [rbx] ; copy value to print
+
 	call printInt
+	call printSpace
+
+	pop rbx
+	pop rcx
+
+	inc bl
+	dec cx
+	jnz loop
 
 
 	mov rax, 1 ; write
@@ -73,5 +99,7 @@ section .bss
 	buffer: resb 20
 
 section .data
-	msg db 'Hello, world!', 0xa     ;the string
+	numbers db 18, 12, 18, 19, 255, 45, 23, 10, 57, 6
+
+	msg db 0xa, 'Hello, world!', 0xa     ;the string
 	len equ $ - msg                 ;length of the string
