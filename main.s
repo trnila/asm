@@ -87,6 +87,21 @@ loop:
 	ret
 
 _start:
+	mov rax, 0 ; read
+	mov rdi, 0 ; stdin
+	mov rsi, $numbers
+	mov rdx, 10
+	syscall
+
+	mov rsi, 0
+loopn:
+	sub [numbers + rsi], byte '0'
+
+	inc rsi
+	cmp rsi, 9
+	jle loopn
+
+
 	call print
 	mov rax, 1 ; write
 	mov rdi, 1 ; stdout
