@@ -1,3 +1,5 @@
+extern bubbleSort
+
 section .text
 global _start ;must be declared for linker (ld)
 
@@ -62,8 +64,7 @@ printSpace:
 
 	ret
 
-_start:
-
+print:
 	mov cx, 10
 	mov rbx, numbers
 loop:
@@ -83,13 +84,20 @@ loop:
 	dec cx
 	jnz loop
 
+	ret
 
+_start:
+	call print
 	mov rax, 1 ; write
 	mov rdi, 1 ; stdout
 	mov rsi, $msg
 	mov rdx, $len
 	syscall
 
+	mov rdx, numbers
+	call bubbleSort
+
+	call print
 
 	mov rax, 60       ;system call number (sys_exit)
 	mov rdi, 0
@@ -99,7 +107,8 @@ section .bss
 	buffer: resb 20
 
 section .data
-	numbers db 18, 12, 18, 19, 255, 45, 23, 10, 57, 6
+	numbers db 18, 12, 18, 19, 100, 45, 23, 10, 57, 6
+	;numbers db 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
 	msg db 0xa, 'Hello, world!', 0xa     ;the string
 	len equ $ - msg                 ;length of the string
